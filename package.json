@@ -1,0 +1,21 @@
+{
+  "name": "motor-notificaciones-chamarket",
+  "version": "1.0.0",
+  "description": "Motor de notificaciones escalable con patrón Strategy para ChaMarket",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js"
+  },
+  "keywords": [
+    "notifications",
+    "strategy-pattern",
+    "design-patterns",
+    "whatsapp",
+    "email",
+    "push-notifications"
+  ],
+  "author": "ChaMarket Team",
+  "license": "MIT"
+}

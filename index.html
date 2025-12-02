@@ -1,11 +1,486 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  
-</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motor de Notificaciones - ChaMarket</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      header {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      header h1 {
+        color: #667eea;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      header p {
+        color: #666;
+        font-size: 1.1em;
+      }
+
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .card h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-weight: 600;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1em;
+        transition: border-color 0.3s;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .checkbox-item input[type="checkbox"] {
+        width: auto;
+        cursor: pointer;
+      }
+
+      button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 600;
+        transition: transform 0.3s, box-shadow 0.3s;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .console-output {
+        grid-column: 1 / -1;
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 20px;
+        border-radius: 15px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+        line-height: 1.6;
+        max-height: 500px;
+        overflow-y: auto;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .console-output pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      .info-box {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+
+      .info-box strong {
+        color: #1976d2;
+      }
+
+      .examples {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+      }
+
+      .example-btn {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+        padding: 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+
+      .example-btn:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+
+        header h1 {
+          font-size: 1.8em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🏪 Motor de Notificaciones ChaMarket</h1>
+        <p>
+          Sistema de notificaciones con Patrón Strategy - WhatsApp, Email y Push
+        </p>
+      </header>
+
+      <div class="main-content">
+        <!-- Formulario de notificación -->
+        <div class="card">
+          <h2>📤 Enviar Notificación</h2>
+
+          <div class="info-box">
+            <strong>💡 Tip:</strong> Selecciona un tipo de evento para que el
+            sistema use los canales configurados automáticamente.
+          </div>
+
+          <form id="notificationForm">
+            <div class="form-group">
+              <label for="tipoEvento">Tipo de Evento</label>
+              <select id="tipoEvento" required>
+                <option value="">-- Selecciona un evento --</option>
+                <option value="promocion">
+                  📣 Promoción (WhatsApp + Email)
+                </option>
+                <option value="stock_minimo">⚠️ Stock Mínimo (Push)</option>
+                <option value="mantenimiento">
+                  🔧 Mantenimiento (Email + Push)
+                </option>
+                <option value="nuevo_pedido">
+                  🛒 Nuevo Pedido (WhatsApp + Push)
+                </option>
+                <option value="confirmacion_compra">
+                  ✅ Confirmación Compra (Email + WhatsApp)
+                </option>
+                <option value="alerta_seguridad">
+                  🔒 Alerta Seguridad (Todos)
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="destinatario">Destinatario</label>
+              <input
+                type="text"
+                id="destinatario"
+                placeholder="+51987654321 o email@ejemplo.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="asunto">Asunto/Título</label>
+              <input
+                type="text"
+                id="asunto"
+                placeholder="Título de la notificación"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="mensaje">Mensaje</label>
+              <textarea
+                id="mensaje"
+                placeholder="Contenido del mensaje..."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit">🚀 Enviar Notificación</button>
+          </form>
+        </div>
+
+        <!-- Modo manual -->
+        <div class="card">
+          <h2>🎯 Modo Manual</h2>
+
+          <div class="info-box">
+            <strong>🔧 Personalizado:</strong> Selecciona manualmente los
+            canales a utilizar.
+          </div>
+
+          <form id="manualForm">
+            <div class="form-group">
+              <label for="destinatarioManual">Destinatario</label>
+              <input
+                type="text"
+                id="destinatarioManual"
+                placeholder="+51987654321 o email@ejemplo.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="asuntoManual">Asunto</label>
+              <input
+                type="text"
+                id="asuntoManual"
+                placeholder="Título del mensaje"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="mensajeManual">Mensaje</label>
+              <textarea
+                id="mensajeManual"
+                placeholder="Contenido..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Canales a usar:</label>
+              <div class="checkbox-group">
+                <div class="checkbox-item">
+                  <input type="checkbox" id="canalWhatsApp" value="whatsapp" />
+                  <label for="canalWhatsApp">📱 WhatsApp</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="canalEmail" value="email" />
+                  <label for="canalEmail">📧 Email</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="canalPush" value="push" />
+                  <label for="canalPush">🔔 Push Notification</label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit">📨 Enviar por Canales Seleccionados</button>
+          </form>
+        </div>
+
+        <!-- Ejemplos rápidos -->
+        <div class="examples">
+          <button class="example-btn" onclick="ejemploPromocion()">
+            📣 Ejemplo: Promoción
+          </button>
+          <button class="example-btn" onclick="ejemploStockMinimo()">
+            ⚠️ Ejemplo: Stock Mínimo
+          </button>
+          <button class="example-btn" onclick="ejemploMantenimiento()">
+            🔧 Ejemplo: Mantenimiento
+          </button>
+          <button class="example-btn" onclick="limpiarConsola()">
+            🗑️ Limpiar Consola
+          </button>
+        </div>
+
+        <!-- Consola de salida -->
+        <div class="card console-output" id="console">
+          <pre id="consoleContent">
+🏪 Motor de Notificaciones ChaMarket - Listo para usar 🚀
+══════════════════════════════════════════════════════════
+
+Selecciona un tipo de evento o usa el modo manual para enviar notificaciones.
+El sistema aplicará automáticamente los canales configurados según el evento.
+
+📋 Configuración actual:
+  • Promoción → WhatsApp + Email
+  • Stock Mínimo → Push
+  • Mantenimiento → Email + Push
+  • Nuevo Pedido → WhatsApp + Push
+  • Confirmación Compra → Email + WhatsApp
+  • Alerta Seguridad → Email + Push + WhatsApp
+</pre
+          >
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import Notificador from "./src/core/Notificador.js";
+      import Notificacion from "./src/models/Notificacion.js";
+
+      // Inicializar motor de notificaciones
+      const motorNotificaciones = new Notificador();
+      window.motorNotificaciones = motorNotificaciones;
+
+      // Sobrescribir console.log para mostrar en la interfaz
+      const consoleContent = document.getElementById("consoleContent");
+      const originalLog = console.log;
+
+      console.log = function (...args) {
+        originalLog.apply(console, args);
+        const message = args
+          .map((arg) =>
+            typeof arg === "object" ? JSON.stringify(arg, null, 2) : arg
+          )
+          .join(" ");
+        consoleContent.textContent += message + "\n";
+        document.getElementById("console").scrollTop =
+          document.getElementById("console").scrollHeight;
+      };
+
+      // Formulario principal
+      document
+        .getElementById("notificationForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const notificacion = new Notificacion(
+            document.getElementById("destinatario").value,
+            document.getElementById("mensaje").value,
+            document.getElementById("asunto").value,
+            document.getElementById("tipoEvento").value
+          );
+
+          motorNotificaciones.notificar(notificacion);
+        });
+
+      // Formulario manual
+      document.getElementById("manualForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const canales = [];
+        if (document.getElementById("canalWhatsApp").checked)
+          canales.push("whatsapp");
+        if (document.getElementById("canalEmail").checked)
+          canales.push("email");
+        if (document.getElementById("canalPush").checked) canales.push("push");
+
+        if (canales.length === 0) {
+          alert("⚠️ Por favor selecciona al menos un canal");
+          return;
+        }
+
+        const notificacion = new Notificacion(
+          document.getElementById("destinatarioManual").value,
+          document.getElementById("mensajeManual").value,
+          document.getElementById("asuntoManual").value,
+          "manual"
+        );
+
+        motorNotificaciones.notificarPorCanales(notificacion, canales);
+      });
+
+      // Funciones para ejemplos
+      window.ejemploPromocion = () => {
+        const notif = new Notificacion(
+          "+51987654321",
+          "¡Mega oferta! 30% de descuento en todas las bebidas. Solo por hoy.",
+          "Promoción Especial del Día",
+          "promocion"
+        );
+        motorNotificaciones.notificar(notif);
+      };
+
+      window.ejemploStockMinimo = () => {
+        const notif = new Notificacion(
+          "device_id_bodeguero_123",
+          'ALERTA: El producto "Coca Cola 1.5L" tiene stock bajo (solo 3 unidades)',
+          "Stock Mínimo Alcanzado",
+          "stock_minimo"
+        );
+        motorNotificaciones.notificar(notif);
+      };
+
+      window.ejemploMantenimiento = () => {
+        const notif = new Notificacion(
+          "bodeguero@chamarket.com",
+          "El sistema estará en mantenimiento mañana de 2:00 AM a 4:00 AM.",
+          "Mantenimiento Programado",
+          "mantenimiento"
+        );
+        motorNotificaciones.notificar(notif);
+      };
+
+      window.limpiarConsola = () => {
+        consoleContent.textContent = "🗑️ Consola limpiada\n\n";
+      };
+    </script>
+  </body>
 </html>
